@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, ParseUUIDPipe, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 
 import { ListsService } from './lists.service';
 import { CreateListDto } from './dto/create-list.dto';
@@ -6,7 +6,6 @@ import { IList } from './interfaces/list.interface';
 import { UpdateListDto } from './dto/update-list.dto';
 
 @Controller('lists')
-@UsePipes(ValidationPipe)
 export class ListsController {
   constructor(
     private readonly listsService: ListsService
@@ -29,7 +28,7 @@ export class ListsController {
     return this.listsService.create(createListDto);
   }
   
-  @Put(':id')
+  @Patch(':id')
   public updateList(
     @Param('id', ParseUUIDPipe) id: string, 
     @Body() updateListDto: UpdateListDto

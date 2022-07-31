@@ -7,23 +7,7 @@ import { CreateListDto, UpdateListDto } from './dto';
 
 @Injectable()
 export class ListsService {
-  private lists: IList[] = [
-    {
-      id: uuid(),
-      title: 'Titulo 1',
-      tasks: 'task 1'
-    },
-    {
-      id: uuid(),
-      title: 'Titulo 2',
-      tasks: 'task 2'
-    },
-    {
-      id: uuid(),
-      title: 'Titulo 3',
-      tasks: 'task 3'
-    }
-  ];
+  private lists: IList[] = [];
 
   public findAll(): IList[] {
     return this.lists;
@@ -69,5 +53,9 @@ export class ListsService {
   public delete(id: string): void {
     const list = this.findOneById(id);
     this.lists = this.lists.filter(list => list.id !== id);
+  }
+
+  public fillListsWithSeedData(lists: IList[]) {
+    this.lists = lists;
   }
 }
