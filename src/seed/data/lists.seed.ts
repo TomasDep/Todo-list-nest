@@ -1,4 +1,4 @@
-import { v4 as uuid } from "uuid";
+/* import { v4 as uuid } from "uuid";
 
 import { IList } from "src/lists/interfaces/list.interface";
 
@@ -18,4 +18,4 @@ export const LISTS_SEED: IList[] = [
     title: 'title 3',
     tasks: 'tasks 3'
   },
-];
+]; */

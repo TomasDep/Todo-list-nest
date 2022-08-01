@@ -1,4 +1,4 @@
-import { User } from "src/users/entities/user.entity";
+/* import { User } from "src/users/entities/user.entity";
 import { v4 as uuid } from "uuid";
 
 export const USERS_SEED: User[] = [
@@ -27,4 +27,4 @@ export const USERS_SEED: User[] = [
     username: 'username 5',
     createAt: new Date().getTime()
   }
-];
+]; */
