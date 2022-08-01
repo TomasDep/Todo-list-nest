@@ -1,61 +1,67 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 
-import { v4 as uuid } from 'uuid';
+import { Model } from 'mongoose';
 
-import { IList } from 'src/lists/interfaces/list.interface';
 import { CreateListDto, UpdateListDto } from './dto';
+import { List } from './entities/list.entity';
 
 @Injectable()
 export class ListsService {
-  private lists: IList[] = [];
+  constructor(
+    @InjectModel(List.name) private readonly listModel: Model<List>
+  ) { }
 
-  public findAll(): IList[] {
-    return this.lists;
-  }
-
-  public findOneById(id: string): IList {
-    const list = this.lists.find(list => list.id === id);
-    
-    if (!list) throw new NotFoundException(`List with id '${ id }' not found`);
-
-    return list;
-  }
-
-  public create(createListDto: CreateListDto): IList {
-    const list: IList = {
-      id: uuid(),
-      ...createListDto
-    }
-
-    this.lists.push(list);
-
-    return list;
-  }
-
-  public update(id: string, updateListDto: UpdateListDto): IList {
-    let listDB = this.findOneById(id);
-
-    if (updateListDto.id && updateListDto.id !== id) 
-      throw new BadRequestException(`List id is not valid`);
-
-    this.lists = this.lists.map(list => {
-      if (list.id === id) {
-        listDB = { ...listDB, ...updateListDto, id }
-        return listDB;
-      }
-
+  public async create(createListDto: CreateListDto): Promise<List> {
+    try {
+      const list = await this.listModel.create(createListDto);
       return list;
-    });
-
-    return listDB;
+    } catch(error) {
+      this.handleExceptions(error);
+    }
   }
 
-  public delete(id: string): void {
-    const list = this.findOneById(id);
-    this.lists = this.lists.filter(list => list.id !== id);
+  public findAll() {
   }
 
-  public fillListsWithSeedData(lists: IList[]) {
-    this.lists = lists;
+  public async findOne(id: string): Promise<List> {
+    let list: List;
+    list = await this.listModel.findById(id);
+
+    if (!list) throw new NotFoundException(`List with id '${ id }' not found in the database`);
+
+    return list;
+  }
+
+  public async update(id: string, updateListDto: UpdateListDto): Promise<any> {
+    const list = await this.findOne(id);
+
+    try {
+      await list.updateOne(updateListDto, { new: true });
+      return { ...list.toJSON(), ...updateListDto };
+    } catch (error) {
+      this.handleExceptions(error);
+    }
+  }
+
+  public async remove(id: string): Promise<void> {
+    const { deletedCount } = await this.listModel.deleteOne({ _id: id });
+    
+    if (deletedCount === 0)
+      throw new BadRequestException(`The list with id '${ id }' not found in the database`);
+    
+    return;
+  }
+
+  public fillListsWithSeedData(lists: List[]) {
+  }
+
+  private handleExceptions(error: any): void {
+    console.log(error);
+
+    if (error.code === 11000)
+      throw new BadRequestException(`List exists in database ${ JSON.stringify(error.keyValue) }`);
+
+    throw new InternalServerErrorException('Sorry an error has occurred, please try again later');
   }
 }

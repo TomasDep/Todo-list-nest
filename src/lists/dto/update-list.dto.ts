@@ -1,16 +1,10 @@
+import { PartialType } from "@nestjs/mapped-types";
 import { IsOptional, IsString, IsUUID } from "class-validator";
+import { CreateListDto } from "./create-list.dto";
 
-export class UpdateListDto {
+export class UpdateListDto extends PartialType(CreateListDto) {
   @IsString()
   @IsUUID()
   @IsOptional()
-  public readonly id?: string;
-
-  @IsString()
-  @IsOptional()
-  public readonly title?: string;
-
-  @IsString()
-  @IsOptional()
-  public readonly tasks?: string;
+  public id: string;
 }
