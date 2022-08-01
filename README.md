@@ -4,13 +4,13 @@
 
 # TODO List
 
-# Tecnologias
+# Technologies
 
 * Nest.Js
 * MongoDB
 * Docker
 
-## Levantar Base de Datos
+## DataBase Config
 
 ```
 docker-compose up -d
