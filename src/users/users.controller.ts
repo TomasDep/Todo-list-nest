@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 
+import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto';
+import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id.pipe';
 
 @Controller('users')
 export class UsersController {
@@ -11,30 +12,30 @@ export class UsersController {
   ) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  public create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
   }
 
   @Get()
-  findAll() {
+  public findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  public findOne(@Param('id', ParseMongoIdPipe) id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
 
   @Patch(':id')
-  update(
-    @Param('id', ParseUUIDPipe) id: string, 
+  public update(
+    @Param('id', ParseMongoIdPipe) id: string, 
     @Body() updateUserDto: UpdateUserDto
-  ) {
+  ):  Promise<any> {
     return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  public remove(@Param('id', ParseMongoIdPipe) id: string): Promise<void> {
     return this.usersService.remove(id);
   }
 }
