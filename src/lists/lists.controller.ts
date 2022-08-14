@@ -1,15 +1,22 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 
 import { List } from './entities/list.entity';
 import { ListsService } from './lists.service';
 import { CreateListDto, UpdateListDto } from './dto';
 import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id.pipe';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Controller('lists')
 export class ListsController {
-  constructor(
-    private readonly listsService: ListsService
-  ) { }
+  constructor(private readonly listsService: ListsService) {}
 
   @Post()
   public create(@Body() createListDto: CreateListDto): Promise<List> {
@@ -17,8 +24,8 @@ export class ListsController {
   }
 
   @Get()
-  public findAll() {
-    return this.listsService.findAll();
+  public findAll(paginationDto: PaginationDto) {
+    return this.listsService.findAll(paginationDto);
   }
 
   @Get(':id')
@@ -26,15 +33,14 @@ export class ListsController {
     return this.listsService.findOne(id);
   }
 
-  
   @Patch(':id')
   public update(
-    @Param('id', ParseMongoIdPipe) id: string, 
-    @Body() updateListDto: UpdateListDto
+    @Param('id', ParseMongoIdPipe) id: string,
+    @Body() updateListDto: UpdateListDto,
   ): Promise<any> {
     return this.listsService.update(id, updateListDto);
   }
-  
+
   @Delete(':id')
   public remove(@Param('id', ParseMongoIdPipe) id: string): Promise<void> {
     return this.listsService.remove(id);

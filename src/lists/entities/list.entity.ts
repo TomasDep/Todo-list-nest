@@ -1,21 +1,18 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+
+import { Document, now } from 'mongoose';
 
 @Schema()
 export class List extends Document {
-  @Prop({
-    required: true
-  })
+  @Prop({ required: true, index: true })
   title: string;
-
-  description: string;
-
-  @Prop({
-    default: false
-  })
+  @Prop({ required: true, index: true })
+  tasks: string;
+  @Prop({ default: false, index: true })
   state: boolean;
-  
+  @Prop({ default: now() })
   createAt: number;
+  @Prop({ default: now() })
   updateAt?: number;
 }
 
