@@ -8,8 +8,8 @@ import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
-    ListsModule, 
-    UsersModule, 
+    ListsModule,
+    UsersModule,
     SeedModule,
     MongooseModule.forRoot('mongodb://localhost:27017/todo-list-nest'),
     CommonModule,
