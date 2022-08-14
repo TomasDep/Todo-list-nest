@@ -8,12 +8,14 @@ import { User, UserSchema } from './entities/user.entity';
 @Module({
   controllers: [UsersController],
   imports: [
-    MongooseModule.forFeature([{
-      name: User.name,
-      schema: UserSchema,
-    }])
+    MongooseModule.forFeature([
+      {
+        name: User.name,
+        schema: UserSchema,
+      },
+    ]),
   ],
-  exports: [UsersService],
-  providers: [UsersService]
+  exports: [UsersService, MongooseModule],
+  providers: [UsersService],
 })
 export class UsersModule {}
