@@ -15,3 +15,8 @@
 ```
 docker-compose up -d
 ```
+
+## Insert Data Base Endpoint
+```
+/api/v1/seed
+```
