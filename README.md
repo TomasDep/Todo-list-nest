@@ -20,3 +20,10 @@ docker-compose up -d
 ```
 /api/v1/seed
 ```
+
+## Production Build
+* Create __.env.prod__
+* Create new image with next command
+```
+docker-compose -f docker-compose.prod.yaml --env-file .env.prod up --build
+```
