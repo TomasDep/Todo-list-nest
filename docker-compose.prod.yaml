@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  todolistapp:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: todolist-docker
+    container_name: todolistapp
+    restart: always # Restart the container if it stops
+    ports:
+      - "${PORT}:${PORT}"
+    # working_dir: /var/www/todo-list
+    environment:
+      MONGODB: ${MONGODB}
+      PORT: ${PORT}
+    # volumes:
+    #   - ./:/var/www/todo-list
+  
+  db:
+    image: mongo:5
+    container_name: mongo-todo-list
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGODB_DATABASE: todo-list-nest
+    volumes:
+      - ./mongo:/data/db
