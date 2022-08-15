@@ -36,3 +36,7 @@ lerna-debug.log*
 
 # docker
 /mongo
+
+# ENV
+.env
+.env.prod
